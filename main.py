@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter.ttk import *
-import sqlite3
 
 
 #* action function for the widgets
@@ -35,10 +34,10 @@ usnInput = Entry(homePage, textvariable=usnVar).place(x=260,
 facultyIdLabel = Label(homePage, text="Faculty Id", width=15).place(x=150,
                                                                     y=55)
 facultyIdVar = StringVar()
-facultyIdInput = Entry(homePage, textvariable=usnVar).place(x=260,
-                                                            y=50,
-                                                            width=200,
-                                                            height=30)
+facultyIdInput = Entry(homePage, textvariable=facultyIdVar).place(x=260,
+                                                                  y=50,
+                                                                  width=200,
+                                                                  height=30)
 # fine amount input
 fineAmountLabel = Label(homePage, text="Fine Id", width=15).place(x=150, y=95)
 fineAmountVar = StringVar()
@@ -54,9 +53,57 @@ fineReasonInput = Entry(homePage, textvariable=fineReasonVar).place(x=260,
                                                                     y=130,
                                                                     width=200,
                                                                     height=60)
-submitButton = Button(homePage, text="Fine Confirm",
+searchButton = Button(homePage, text="Fine Confirm",
                       command=submit).place(x=280, y=200)
 
 #? Search Student Page Widgets
+outstandingFineLabel = Label(profilePage, text="Pending Fine:",
+                             width=15).place(x=530, y=15)
+outstandingFineVar = StringVar()
+# usn input
+searchStudentLabel = Label(profilePage, text="Search Student USN",
+                           width=15).place(x=20, y=15)
+searchStudentVar = StringVar()
+searchStudentInput = Entry(profilePage, textvariable=usnVar).place(x=160,
+                                                                   y=10,
+                                                                   width=200,
+                                                                   height=30)
+submitButton = Button(profilePage, text="Search", command=submit).place(x=370,
+                                                                        y=10)
+# table creation
+fineDetailsTable = Treeview(profilePage)
+fineDetailsTable['columns'] = ("Date", "Description", "Amount", "Paid")
+
+# formate columns
+fineDetailsTable.column("#0", width=15)
+fineDetailsTable.column("Date", anchor=CENTER, width=100)
+fineDetailsTable.column("Description", anchor=W, width=350)
+fineDetailsTable.column("Amount", anchor=CENTER, width=100)
+fineDetailsTable.column("Paid", anchor=CENTER, width=100)
+
+# create headings
+fineDetailsTable.heading("#0", text="", anchor=W)
+fineDetailsTable.heading("Date", text="Date", anchor=W)
+fineDetailsTable.heading("Description", text="Description", anchor=W)
+fineDetailsTable.heading("Amount", text="Amount", anchor=CENTER)
+fineDetailsTable.heading("Paid", text="Paid", anchor=W)
+
+# adding data
+fineDetailsTable.insert(parent="",
+                        index="end",
+                        iid=0,
+                        values=("11-02-22", "Fine for using phone in class",
+                                "200", "Not Paid"))
+fineDetailsTable.insert(parent="",
+                        index="end",
+                        iid=1,
+                        values=("11-02-22", "IA retest fine", "600",
+                                "Not Paid"))
+fineDetailsTable.insert(parent="",
+                        index="end",
+                        iid=2,
+                        values=("11-02-22", "Ragging fine", "25000",
+                                "Not Paid"))
+fineDetailsTable.place(x=10, y=150)
 
 root.mainloop()
