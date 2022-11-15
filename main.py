@@ -3,9 +3,18 @@ from tkinter.ttk import *
 
 
 #* action function for the widgets
-def submit():
+def fineSubmit():
     print(usnVar.get())
     usnVar.set("")
+
+
+def searchBtn():
+    fineRecord = [("11-02-22", "IA retest fine", "600", "Not Paid"),
+                  ("11-02-22", "Fine for using phone in class", "200",
+                   "Not Paid"),
+                  ("11-02-22", "IA retest fine", "600", "Not Paid")]
+    for indx, data in enumerate(fineRecord):
+        fineDetailsTable.insert(parent="", index="end", iid=indx, values=data)
 
 
 #! create root window
@@ -53,8 +62,8 @@ fineReasonInput = Entry(homePage, textvariable=fineReasonVar).place(x=260,
                                                                     y=130,
                                                                     width=200,
                                                                     height=60)
-searchButton = Button(homePage, text="Fine Confirm",
-                      command=submit).place(x=280, y=200)
+fineButton = Button(homePage, text="Fine", command=fineSubmit).place(x=280,
+                                                                     y=200)
 
 #? Search Student Page Widgets
 outstandingFineLabel = Label(profilePage, text="Pending Fine:",
@@ -68,8 +77,6 @@ searchStudentInput = Entry(profilePage, textvariable=usnVar).place(x=160,
                                                                    y=10,
                                                                    width=200,
                                                                    height=30)
-submitButton = Button(profilePage, text="Search", command=submit).place(x=370,
-                                                                        y=10)
 # table creation
 fineDetailsTable = Treeview(profilePage)
 fineDetailsTable['columns'] = ("Date", "Description", "Amount", "Paid")
@@ -89,21 +96,23 @@ fineDetailsTable.heading("Amount", text="Amount", anchor=CENTER)
 fineDetailsTable.heading("Paid", text="Paid", anchor=W)
 
 # adding data
-fineDetailsTable.insert(parent="",
-                        index="end",
-                        iid=0,
-                        values=("11-02-22", "Fine for using phone in class",
-                                "200", "Not Paid"))
-fineDetailsTable.insert(parent="",
-                        index="end",
-                        iid=1,
-                        values=("11-02-22", "IA retest fine", "600",
-                                "Not Paid"))
-fineDetailsTable.insert(parent="",
-                        index="end",
-                        iid=2,
-                        values=("11-02-22", "Ragging fine", "25000",
-                                "Not Paid"))
+# fineDetailsTable.insert(parent="",
+#                         index="end",
+#                         iid=0,
+#                         values=("11-02-22", "Fine for using phone in class",
+#                                 "200", "Not Paid"))
+# fineDetailsTable.insert(parent="",
+#                         index="end",
+#                         iid=1,
+#                         values=("11-02-22", "IA retest fine", "600",
+#                                 "Not Paid"))
+# fineDetailsTable.insert(parent="",
+#                         index="end",
+#                         iid=2,
+#                         values=("11-02-22", "Ragging fine", "25000",
+#                                 "Not Paid"))
+searchButton = Button(profilePage, text="Search",
+                      command=searchBtn).place(x=370, y=10)
 fineDetailsTable.place(x=10, y=150)
 
 root.mainloop()
