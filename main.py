@@ -9,10 +9,11 @@ def fineSubmit():
 
 
 def searchBtn():
-    fineRecord = [("11-02-22", "IA retest fine", "600", "Not Paid"),
-                  ("11-02-22", "Fine for using phone in class", "200",
-                   "Not Paid"),
-                  ("11-02-22", "IA retest fine", "600", "Not Paid")]
+    fineRecord = [
+        ("11-02-22", "IA retest fine", "600", "Not Paid"),
+        ("11-02-22", "Fine for using phone in class", "200", "Not Paid"),
+        ("11-02-22", "IA retest fine", "600", "Not Paid"),
+    ]
     for indx, data in enumerate(fineRecord):
         fineDetailsTable.insert(parent="", index="end", iid=indx, values=data)
 
@@ -28,7 +29,7 @@ homePage = Frame(root)
 profilePage = Frame(root)
 notebook.add(homePage, text="Fine")
 notebook.add(profilePage, text="Search")
-notebook.place(x=10, y=5, width=750, height=600)
+notebook.place(x=10, y=5, width=730, height=600)
 
 #? Fine page widgets
 # usn input
@@ -78,7 +79,7 @@ searchStudentInput = Entry(profilePage, textvariable=usnVar).place(x=160,
                                                                    width=200,
                                                                    height=30)
 # table creation
-fineDetailsTable = Treeview(profilePage)
+fineDetailsTable = Treeview(profilePage, height=400)
 fineDetailsTable['columns'] = ("Date", "Description", "Amount", "Paid")
 
 # formate columns
@@ -95,24 +96,8 @@ fineDetailsTable.heading("Description", text="Description", anchor=W)
 fineDetailsTable.heading("Amount", text="Amount", anchor=CENTER)
 fineDetailsTable.heading("Paid", text="Paid", anchor=W)
 
-# adding data
-# fineDetailsTable.insert(parent="",
-#                         index="end",
-#                         iid=0,
-#                         values=("11-02-22", "Fine for using phone in class",
-#                                 "200", "Not Paid"))
-# fineDetailsTable.insert(parent="",
-#                         index="end",
-#                         iid=1,
-#                         values=("11-02-22", "IA retest fine", "600",
-#                                 "Not Paid"))
-# fineDetailsTable.insert(parent="",
-#                         index="end",
-#                         iid=2,
-#                         values=("11-02-22", "Ragging fine", "25000",
-#                                 "Not Paid"))
 searchButton = Button(profilePage, text="Search",
                       command=searchBtn).place(x=370, y=10)
-fineDetailsTable.place(x=10, y=150)
+fineDetailsTable.place(x=10, y=140)
 
 root.mainloop()
