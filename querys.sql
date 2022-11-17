@@ -16,15 +16,15 @@ CREATE TABLE faculties(
 CREATE TABLE department_fines(
     id INT PRIMARY KEY NOT NULL,
     description VARCHAR(100),
-    amount INT,
-)
+    amount INT
+);
 
 -- college level fines
-CREATE TABLE department_fines(
+CREATE TABLE college_fines(
     id INT PRIMARY KEY NOT NULL,
     description VARCHAR(100),
-    amount INT,
-)
+    amount INT
+);
 
 -- fines table
 CREATE TABLE fines(
@@ -36,6 +36,6 @@ CREATE TABLE fines(
     fine_id INT, -- foreign key -> about the fine
     description TEXT,
     fined_by INT, -- foreign key -> of falculty fined
-    FOREIGN KEY (fine_id) REFERENCES department_fines(id),
+    FOREIGN KEY (fine_id) REFERENCES department_fines(id) REFERENCES college_fines(id),
     FOREIGN KEY (fined_by) REFERENCES faculties(id)
 )
