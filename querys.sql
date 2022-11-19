@@ -28,7 +28,7 @@ CREATE TABLE college_fines(
 
 -- fines table
 CREATE TABLE fines(
-    id CHAR(21), PRIMARY KEY 
+    id CHAR(21) PRIMARY KEY,
     usn CHAR(10),
     date CHAR(8),
     amount INT,
@@ -38,4 +38,4 @@ CREATE TABLE fines(
     fined_by INT, -- foreign key -> of falculty fined
     FOREIGN KEY (fine_id) REFERENCES department_fines(id) REFERENCES college_fines(id),
     FOREIGN KEY (fined_by) REFERENCES faculties(id)
-)
+);
