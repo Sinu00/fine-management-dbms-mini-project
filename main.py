@@ -103,6 +103,14 @@ searchStudentInput = Entry(profilePage, textvariable=usnVar).place(x=160,
                                                                    y=10,
                                                                    width=200,
                                                                    height=30)
+# after search show info about the student
+nameOfStudent = Label(profilePage, text="Name: Rabeeh T A",
+                      width=15).place(x=40, y=55)
+BranchOfStudent = Label(profilePage, text="Branch: CS", width=15).place(x=40,
+                                                                        y=80)
+phoneNoStudent = Label(profilePage, text="Phone No: +91 9048814964",
+                       width=15).place(x=40, y=105)
+
 # table for showing the fines
 fineDetailsTable = Treeview(profilePage, height=400)
 fineDetailsTable['columns'] = ("Fine Id", "Description", "Amount", "Paid")
