@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
+from dbQueryFuncs import getAllFineInfo
 
 
 #* action function for the widgets
@@ -31,7 +32,7 @@ notebook.add(homePage, text="Fine")
 notebook.add(profilePage, text="Search")
 notebook.place(x=10, y=5, width=730, height=600)
 
-#? Fine page widgets
+#? Home page widgets
 # usn input
 usnLabel = Label(homePage, text="Student USN", width=15).place(x=150, y=15)
 usnVar = StringVar()
@@ -66,6 +67,30 @@ fineReasonInput = Entry(homePage, textvariable=fineReasonVar).place(x=260,
 fineButton = Button(homePage, text="Fine", command=fineSubmit).place(x=280,
                                                                      y=200)
 
+# table for information about the available fines
+usnLabel = Label(homePage,
+                 text="->  Get the FINE ID from the bellow index",
+                 width=150).place(x=55, y=240)
+fineInfoTable = Treeview(homePage, height=20)
+fineInfoTable['columns'] = ("Fine Id", "Description", "Amount")
+
+# formate columns
+fineInfoTable.column("#0", width=15)
+fineInfoTable.column("Fine Id", anchor=CENTER, width=100)
+fineInfoTable.column("Description", anchor=W, width=350)
+fineInfoTable.column("Amount", anchor=CENTER, width=100)
+
+# create headings
+fineInfoTable.heading("#0", text="", anchor=W)
+fineInfoTable.heading("Fine Id", text="Fine Id", anchor=W)
+fineInfoTable.heading("Description", text="Description", anchor=W)
+fineInfoTable.heading("Amount", text="Amount", anchor=CENTER)
+
+for indx, fine in enumerate(getAllFineInfo()):
+    fineInfoTable.insert(parent="", index="end", iid=indx, values=fine)
+
+fineInfoTable.place(x=55, y=265)
+
 #? Search Student Page Widgets
 outstandingFineLabel = Label(profilePage, text="Pending Fine:",
                              width=15).place(x=530, y=15)
@@ -78,20 +103,20 @@ searchStudentInput = Entry(profilePage, textvariable=usnVar).place(x=160,
                                                                    y=10,
                                                                    width=200,
                                                                    height=30)
-# table creation
+# table for showing the fines
 fineDetailsTable = Treeview(profilePage, height=400)
-fineDetailsTable['columns'] = ("Date", "Description", "Amount", "Paid")
+fineDetailsTable['columns'] = ("Fine Id", "Description", "Amount", "Paid")
 
 # formate columns
 fineDetailsTable.column("#0", width=15)
-fineDetailsTable.column("Date", anchor=CENTER, width=100)
+fineDetailsTable.column("Fine Id", anchor=CENTER, width=100)
 fineDetailsTable.column("Description", anchor=W, width=350)
 fineDetailsTable.column("Amount", anchor=CENTER, width=100)
 fineDetailsTable.column("Paid", anchor=CENTER, width=100)
 
 # create headings
 fineDetailsTable.heading("#0", text="", anchor=W)
-fineDetailsTable.heading("Date", text="Date", anchor=W)
+fineDetailsTable.heading("Fine Id", text="Fine Id", anchor=W)
 fineDetailsTable.heading("Description", text="Description", anchor=W)
 fineDetailsTable.heading("Amount", text="Amount", anchor=CENTER)
 fineDetailsTable.heading("Paid", text="Paid", anchor=W)

@@ -5,7 +5,7 @@ import sqlite3
 import csv
 
 
-#? insert a row into student table
+#? insert row in to STUDENT table. schema==> (usn, name, phone, branch)
 def insertStudentTable(usn, name, phNo):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -17,7 +17,7 @@ def insertStudentTable(usn, name, phNo):
     print("insert success")
 
 
-#? insert a row into student table
+#? insert a row into FACULTY table. schema==> (id, name)
 def insertFacultyTable(id, name):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -29,7 +29,7 @@ def insertFacultyTable(id, name):
     print("insert success")
 
 
-#? insert a row into department level fines table
+#? insert a row into DEPARTMENT level fines table. schema==>(id, description, amount)
 def insertDepartmentFineTable(id, description, amount):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -41,7 +41,7 @@ def insertDepartmentFineTable(id, description, amount):
     print("insert success")
 
 
-#? insert a row into college level fines table
+#? insert a row into COLLEGE level fines table. schema==> (id, description, amount)
 def insertCollegeFineTable(id, description, amount):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -53,10 +53,12 @@ def insertCollegeFineTable(id, description, amount):
     print("insert success")
 
 
+#? insert a row into FINES level fines table. schema==> (id, description, amount)
+
 #! opening the CSV file
-with open('college-fines.csv', mode='r') as file:
+with open('studentData.csv', mode='r') as file:
     # reading the CSV file
     csvFile = csv.reader(file)
     # displaying the contents of the CSV file
-    for usn, name, amount in csvFile:
-        insertCollegeFineTable(usn, name.upper(), amount)
+    for usn, name in csvFile:
+        print(usn, name.upper(), usn[5:7])
