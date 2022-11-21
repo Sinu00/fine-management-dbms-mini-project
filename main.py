@@ -1,12 +1,16 @@
 from tkinter import *
 from tkinter.ttk import *
-from dbQueryFuncs import getAllFineInfo
+from dbQueryFuncs import getAllFineInfo, postFine
 
 
 #* action function for the widgets
 def fineSubmit():
-    print(usnVar.get())
+    postFine(usnVar.get().upper(), int(facultyIdVar.get()),
+             int(fineIdVar.get()), fineReasonVar.get())
     usnVar.set("")
+    facultyIdVar.set("")
+    fineIdVar.set("")
+    fineReasonVar.set("")
 
 
 def searchBtn():
@@ -50,12 +54,12 @@ facultyIdInput = Entry(homePage, textvariable=facultyIdVar).place(x=260,
                                                                   width=200,
                                                                   height=30)
 # fine amount input
-fineAmountLabel = Label(homePage, text="Fine Id", width=15).place(x=150, y=95)
-fineAmountVar = StringVar()
-fineAmountInput = Entry(homePage, textvariable=fineAmountVar).place(x=260,
-                                                                    y=90,
-                                                                    width=200,
-                                                                    height=30)
+fineIdLabel = Label(homePage, text="Fine Id", width=15).place(x=150, y=95)
+fineIdVar = StringVar()
+fineIdInput = Entry(homePage, textvariable=fineIdVar).place(x=260,
+                                                            y=90,
+                                                            width=200,
+                                                            height=30)
 # fine reason input
 fineReasonLabel = Label(homePage, text="Fine Description",
                         width=15).place(x=150, y=135)
