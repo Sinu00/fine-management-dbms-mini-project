@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
-from dbQueryFuncs import getAllFineInfo, postFine
+from dbQueryFuncs import getAllFineInfo, postFine, studentFineHistory, getStudentInfo
 
 
 #* action function for the widgets
@@ -14,13 +14,9 @@ def fineSubmit():
 
 
 def searchBtn():
-    fineRecord = [
-        ("11-02-22", "IA retest fine", "600", "Not Paid"),
-        ("11-02-22", "Fine for using phone in class", "200", "Not Paid"),
-        ("11-02-22", "IA retest fine", "600", "Not Paid"),
-    ]
-    for indx, data in enumerate(fineRecord):
-        fineDetailsTable.insert(parent="", index="end", iid=indx, values=data)
+    # get the student data and update in UI
+    studentData = getStudentInfo(searchStudentVar.get())
+    print(studentData)
 
 
 #! create root window
@@ -103,17 +99,18 @@ outstandingFineVar = StringVar()
 searchStudentLabel = Label(profilePage, text="Search Student USN",
                            width=15).place(x=20, y=15)
 searchStudentVar = StringVar()
-searchStudentInput = Entry(profilePage, textvariable=usnVar).place(x=160,
-                                                                   y=10,
-                                                                   width=200,
-                                                                   height=30)
+searchStudentInput = Entry(profilePage,
+                           textvariable=searchStudentVar).place(x=160,
+                                                                y=10,
+                                                                width=200,
+                                                                height=30)
 # after search show info about the student
-nameOfStudent = Label(profilePage, text="Name: Rabeeh T A",
+nameOfStudent = Label(profilePage, text=f"Name: Rabeeh T A",
                       width=15).place(x=40, y=55)
-BranchOfStudent = Label(profilePage, text="Branch: CS", width=15).place(x=40,
-                                                                        y=80)
-phoneNoStudent = Label(profilePage, text="Phone No: +91 9048814964",
-                       width=15).place(x=40, y=105)
+BranchOfStudent = Label(profilePage, text=f"Branch: CS", width=15).place(x=40,
+                                                                         y=80)
+phoneNoStudent = Label(profilePage, text=f"Phone No: +91 9048814964",
+                       width=25).place(x=40, y=105)
 
 # table for showing the fines
 fineDetailsTable = Treeview(profilePage, height=400)

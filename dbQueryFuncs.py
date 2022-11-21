@@ -40,3 +40,24 @@ def postFine(usn, facultyId, fineId, description):
     cursor.execute(queryStr, dataTuple)
     conn.commit()
     conn.close()
+
+
+# get all the fines of a student from the fines database
+def studentFineHistory(usn):
+    print(usn)
+    studentData = ''
+    studentFineHistory = []
+    pass
+
+
+# get the data of the student from the students db
+def getStudentInfo(usn):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    studentInfo = cursor.execute("SELECT * FROM students WHERE usn LIKE ?;",
+                                 (usn.upper(), ))
+    studentInfo = tuple(studentInfo)
+    conn.commit()
+    conn.close()
+    print(studentInfo[0])
+    return studentInfo[0]
