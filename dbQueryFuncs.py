@@ -43,11 +43,30 @@ def postFine(usn, facultyId, fineId, description):
 
 
 # get all the fines of a student from the fines database
+# return array of dictionaries {date,fine_id,description, amount, paid_status}
 def studentFineHistory(usn):
-    print(usn)
-    studentData = ''
     studentFineHistory = []
-    pass
+    allFinesInfo = getAllFineInfo()
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    studentFineQueryResult = cursor.execute(
+        "SELECT * FROM fines WHERE usn LIKE ?;", (usn.upper(), ))
+    for fine in studentFineQueryResult:
+        fineDict = {
+            "date": fine[2],
+            "fine_id": fine[0],
+            "description": fine[5],
+            "paid_status": fine[3]
+        }
+        # get fine info from the college and department fines by fine id
+        for fineInfo in allFinesInfo:
+            if fineInfo[0] == fine[4]:
+                fineDict["amount"] = fineInfo[2]
+
+        studentFineHistory.append(fineDict)
+    conn.commit()
+    conn.close()
+    return studentFineHistory
 
 
 # get the data of the student from the students db
@@ -60,3 +79,6 @@ def getStudentInfo(usn):
     conn.commit()
     conn.close()
     return studentInfo[0]
+
+
+studentFineHistory("4pa20cs094")

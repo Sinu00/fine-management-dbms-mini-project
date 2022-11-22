@@ -29,10 +29,30 @@ def fineSubmit():
 def searchBtn():
     # get the student data and update in UI
     studentData = getStudentInfo(searchStudentVar.get())
-    print(studentData)
     nameOfStudentVar.set(f"Name: {studentData[1]}")
     branchOfStudentVar.set(f"Branch: {studentData[3]}")
     phoneNoStudentVar.set(f"Phone No: {studentData[2]}")
+
+    finesRecords = studentFineHistory(searchStudentVar.get())
+    for indx, fineRecord in enumerate(finesRecords):
+        paid_status = ''
+        if fineRecord["paid_status"] == 0:
+            paid_status = "Not Paid"
+        else:
+            paid_status = "Paid"
+
+        fineDetailsTable.insert(parent="",
+                                index="end",
+                                iid=indx,
+                                values=(indx + 1, fineRecord["date"],
+                                        fineRecord["description"],
+                                        fineRecord["amount"], paid_status))
+    totalFineToPay = 0
+    for fineAmount in finesRecords:
+        if fineAmount["paid_status"] != 1:
+            totalFineToPay += fineAmount["amount"]
+
+    outstandingFineVar.set(f"Pending Fine: {str(totalFineToPay)}")
 
 
 #? Home page widgets
@@ -95,9 +115,11 @@ for indx, fine in enumerate(getAllFineInfo()):
 fineInfoTable.place(x=55, y=265)
 
 #? Search Student Page Widgets
-outstandingFineLabel = Label(profilePage, text="Pending Fine:",
-                             width=15).place(x=530, y=15)
 outstandingFineVar = StringVar()
+outstandingFineLabel = Label(profilePage,
+                             textvariable=outstandingFineVar,
+                             width=15).place(x=530, y=15)
+
 # usn input
 searchStudentLabel = Label(profilePage, text="Search Student USN",
                            width=15).place(x=20, y=15)
@@ -123,18 +145,21 @@ phoneNoStudent = Label(profilePage, textvariable=phoneNoStudentVar,
 
 # table for showing the fines
 fineDetailsTable = Treeview(profilePage, height=400)
-fineDetailsTable['columns'] = ("Fine Id", "Description", "Amount", "Paid")
+fineDetailsTable['columns'] = ("Fine Id", "Date", "Description", "Amount",
+                               "Paid")
 
 # formate columns
 fineDetailsTable.column("#0", width=15)
-fineDetailsTable.column("Fine Id", anchor=CENTER, width=100)
+fineDetailsTable.column("Fine Id", anchor=CENTER, width=60)
+fineDetailsTable.column("Date", anchor=CENTER, width=90)
 fineDetailsTable.column("Description", anchor=W, width=350)
-fineDetailsTable.column("Amount", anchor=CENTER, width=100)
-fineDetailsTable.column("Paid", anchor=CENTER, width=100)
+fineDetailsTable.column("Amount", anchor=CENTER, width=60)
+fineDetailsTable.column("Paid", anchor=CENTER, width=80)
 
 # create headings
 fineDetailsTable.heading("#0", text="", anchor=W)
 fineDetailsTable.heading("Fine Id", text="Fine Id", anchor=W)
+fineDetailsTable.heading("Date", text="Date", anchor=W)
 fineDetailsTable.heading("Description", text="Description", anchor=W)
 fineDetailsTable.heading("Amount", text="Amount", anchor=CENTER)
 fineDetailsTable.heading("Paid", text="Paid", anchor=W)
