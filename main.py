@@ -2,8 +2,21 @@ from tkinter import *
 from tkinter.ttk import *
 from dbQueryFuncs import getAllFineInfo, postFine, studentFineHistory, getStudentInfo
 
+#! create root window
+root = Tk()
+root.title("Home")
+root.geometry('750x600')
 
-#* action function for the widgets
+#? different pages of the app
+notebook = Notebook()
+homePage = Frame(root)
+profilePage = Frame(root)
+notebook.add(homePage, text="Fine")
+notebook.add(profilePage, text="Search")
+notebook.place(x=10, y=5, width=730, height=600)
+
+
+#*! action function for the widgets
 def fineSubmit():
     postFine(usnVar.get().upper(), int(facultyIdVar.get()),
              int(fineIdVar.get()), fineReasonVar.get())
@@ -17,20 +30,10 @@ def searchBtn():
     # get the student data and update in UI
     studentData = getStudentInfo(searchStudentVar.get())
     print(studentData)
+    nameOfStudentVar.set(f"Name: {studentData[1]}")
+    branchOfStudentVar.set(f"Branch: {studentData[3]}")
+    phoneNoStudentVar.set(f"Phone No: {studentData[2]}")
 
-
-#! create root window
-root = Tk()
-root.title("Home")
-root.geometry('750x600')
-
-#? different pages of the app
-notebook = Notebook()
-homePage = Frame(root)
-profilePage = Frame(root)
-notebook.add(homePage, text="Fine")
-notebook.add(profilePage, text="Search")
-notebook.place(x=10, y=5, width=730, height=600)
 
 #? Home page widgets
 # usn input
@@ -105,11 +108,17 @@ searchStudentInput = Entry(profilePage,
                                                                 width=200,
                                                                 height=30)
 # after search show info about the student
-nameOfStudent = Label(profilePage, text=f"Name: Rabeeh T A",
-                      width=15).place(x=40, y=55)
-BranchOfStudent = Label(profilePage, text=f"Branch: CS", width=15).place(x=40,
-                                                                         y=80)
-phoneNoStudent = Label(profilePage, text=f"Phone No: +91 9048814964",
+nameOfStudentVar = StringVar()
+nameOfStudentVar.set("Name: ")
+nameOfStudent = Label(profilePage, textvariable=nameOfStudentVar,
+                      width=40).place(x=40, y=55)
+branchOfStudentVar = StringVar()
+branchOfStudentVar.set("Branch: ")
+branchOfStudent = Label(profilePage, textvariable=branchOfStudentVar,
+                        width=15).place(x=40, y=80)
+phoneNoStudentVar = StringVar()
+phoneNoStudentVar.set("Phone No: ")
+phoneNoStudent = Label(profilePage, textvariable=phoneNoStudentVar,
                        width=25).place(x=40, y=105)
 
 # table for showing the fines

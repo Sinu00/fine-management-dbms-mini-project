@@ -59,5 +59,4 @@ def getStudentInfo(usn):
     studentInfo = tuple(studentInfo)
     conn.commit()
     conn.close()
-    print(studentInfo[0])
     return studentInfo[0]
