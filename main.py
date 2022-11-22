@@ -1,11 +1,11 @@
 from tkinter import *
 from tkinter.ttk import *
-from dbQueryFuncs import getAllFineInfo, postFine, studentFineHistory, getStudentInfo
+from dbQueryFuncs import getAllFineInfo, postFine, studentFineHistory, getStudentInfo, finePaidUpdate
 
 #! create root window
 root = Tk()
 root.title("Home")
-root.geometry('750x600')
+root.geometry('800x650')
 
 #? different pages of the app
 notebook = Notebook()
@@ -13,11 +13,11 @@ homePage = Frame(root)
 profilePage = Frame(root)
 notebook.add(homePage, text="Fine")
 notebook.add(profilePage, text="Search")
-notebook.place(x=10, y=5, width=730, height=600)
+notebook.place(x=10, y=5, width=790, height=640)
 
 
 #*! action function for the widgets
-def fineSubmit():
+def imposeFine():
     postFine(usnVar.get().upper(), int(facultyIdVar.get()),
              int(fineIdVar.get()), fineReasonVar.get())
     usnVar.set("")
@@ -26,7 +26,11 @@ def fineSubmit():
     fineReasonVar.set("")
 
 
-def searchBtn():
+def searchStudent():
+    # clear the table
+    for row in fineDetailsTable.get_children():
+        fineDetailsTable.delete(row)
+
     # get the student data and update in UI
     studentData = getStudentInfo(searchStudentVar.get())
     nameOfStudentVar.set(f"Name: {studentData[1]}")
@@ -43,7 +47,7 @@ def searchBtn():
 
         fineDetailsTable.insert(parent="",
                                 index="end",
-                                iid=indx,
+                                iid=fineRecord["fine_id"],
                                 values=(indx + 1, fineRecord["date"],
                                         fineRecord["description"],
                                         fineRecord["amount"], paid_status))
@@ -53,6 +57,11 @@ def searchBtn():
             totalFineToPay += fineAmount["amount"]
 
     outstandingFineVar.set(f"Pending Fine: {str(totalFineToPay)}")
+
+
+def finePayment():
+    finePaidUpdate(fineDetailsTable.selection()[0])
+    searchStudent()
 
 
 #? Home page widgets
@@ -87,7 +96,7 @@ fineReasonInput = Entry(homePage, textvariable=fineReasonVar).place(x=260,
                                                                     y=130,
                                                                     width=200,
                                                                     height=60)
-fineButton = Button(homePage, text="Fine", command=fineSubmit).place(x=280,
+fineButton = Button(homePage, text="Fine", command=imposeFine).place(x=280,
                                                                      y=200)
 
 # table for information about the available fines
@@ -144,16 +153,16 @@ phoneNoStudent = Label(profilePage, textvariable=phoneNoStudentVar,
                        width=25).place(x=40, y=105)
 
 # table for showing the fines
-fineDetailsTable = Treeview(profilePage, height=400)
+fineDetailsTable = Treeview(profilePage, height=200)
 fineDetailsTable['columns'] = ("Fine Id", "Date", "Description", "Amount",
                                "Paid")
 
 # formate columns
 fineDetailsTable.column("#0", width=15)
-fineDetailsTable.column("Fine Id", anchor=CENTER, width=60)
-fineDetailsTable.column("Date", anchor=CENTER, width=90)
+fineDetailsTable.column("Fine Id", anchor=CENTER, width=80)
+fineDetailsTable.column("Date", anchor=CENTER, width=100)
 fineDetailsTable.column("Description", anchor=W, width=350)
-fineDetailsTable.column("Amount", anchor=CENTER, width=60)
+fineDetailsTable.column("Amount", anchor=CENTER, width=70)
 fineDetailsTable.column("Paid", anchor=CENTER, width=80)
 
 # create headings
@@ -165,7 +174,10 @@ fineDetailsTable.heading("Amount", text="Amount", anchor=CENTER)
 fineDetailsTable.heading("Paid", text="Paid", anchor=W)
 
 searchButton = Button(profilePage, text="Search",
-                      command=searchBtn).place(x=370, y=10)
-fineDetailsTable.place(x=10, y=140)
+                      command=searchStudent).place(x=370, y=10)
+fineDetailsTable.place(x=10, y=160)
 
+finePaymentBtn = Button(profilePage,
+                        text="Selected Fine Paid",
+                        command=finePayment).place(x=10, y=130)
 root.mainloop()

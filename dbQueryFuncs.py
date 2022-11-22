@@ -81,4 +81,13 @@ def getStudentInfo(usn):
     return studentInfo[0]
 
 
+def finePaidUpdate(fine_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    studentInfo = cursor.execute("UPDATE fines SET paid = 1 WHERE id = ?",
+                                 (fine_id, ))
+    conn.commit()
+    conn.close()
+
+
 studentFineHistory("4pa20cs094")
