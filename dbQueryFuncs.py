@@ -88,6 +88,3 @@ def finePaidUpdate(fine_id):
                                  (fine_id, ))
     conn.commit()
     conn.close()
-
-
-studentFineHistory("4pa20cs094")
