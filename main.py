@@ -1,20 +1,51 @@
 from tkinter import *
 from tkinter.ttk import *
 from dbQueryFuncs import getAllFineInfo, postFine, studentFineHistory, getStudentInfo, finePaidUpdate
+from msgFunc import sendTextMsg
+import tkinter as tk
+from tkinter import ttk
+
 
 #! create root window
 root = Tk()
-root.title("Home")
-root.geometry('800x650')
+root.title("-     FINE MANAGEMENT SYSTEM")
+root.state("zoomed")
+root.iconbitmap('images/FINEPAGEICON.ico')
+root.configure(bg='white')
 
 #? different pages of the app
-notebook = Notebook()
-homePage = Frame(root)
-profilePage = Frame(root)
+notebook = ttk.Notebook()
+homePage = ttk.Frame(root, style="Tab.TFrame")
+profilePage = ttk.Frame(root, style="Tab.TFrame")
 notebook.add(homePage, text="Fine")
 notebook.add(profilePage, text="Search")
-notebook.place(x=10, y=5, width=790, height=640)
+notebook.place(x=0, y=0, width=1290, height=670)
 
+#style for the frame
+style = ttk.Style(root)
+style.configure("Tab.TFrame", background="#FCFFE7")
+style.configure("TNotebook", tabposition='n')
+
+#icons 
+photo1 = PhotoImage(file="images//STUDENTUSN.png")
+label1 = Label(homePage, image=photo1, background="#FCFFE7")
+label1.place(x=448, y=28)
+
+photo2 = PhotoImage(file="images//FACULTYID.png")
+label2 = Label(homePage, image=photo2, background="#FCFFE7")
+label2.place(x=448, y=68)
+
+photo3 = PhotoImage(file="images/FINEID.png")
+label3 = Label(homePage, image=photo3, background="#FCFFE7")
+label3.place(x=448, y=108)
+
+photo4 = PhotoImage(file="images/FINEDISC.png")
+label4 = Label(homePage, image=photo4, background="#FCFFE7")
+label4.place(x=448, y=148)
+
+photo5 = PhotoImage(file="")
+label5 = Label(homePage, image=photo5, background="#FCFFE7")
+label5.place(x=448, y=148)
 
 #*! action function for the widgets
 def imposeFine():
@@ -56,7 +87,7 @@ def searchStudent():
         if fineAmount["paid_status"] != 1:
             totalFineToPay += fineAmount["amount"]
 
-    outstandingFineVar.set(f"Pending Fine: {str(totalFineToPay)}")
+    outstandingFineVar.set(f"Pending Fine: ₹{str(totalFineToPay)}")
 
 
 def finePayment():
@@ -66,44 +97,45 @@ def finePayment():
 
 #? Home page widgets
 # usn input
-usnLabel = Label(homePage, text="Student USN", width=15).place(x=150, y=15)
+usnLabel = Label(homePage, text="STUDENT USN", width=15, background="#FCFFE7", foreground="black" ).place(x=480, y=35)
 usnVar = StringVar()
-usnInput = Entry(homePage, textvariable=usnVar).place(x=260,
-                                                      y=10,
+usnInput = Entry(homePage, textvariable=usnVar).place(x=600,
+                                                      y=30,
                                                       width=200,
                                                       height=30)
 
 # fined by => faculty info
-facultyIdLabel = Label(homePage, text="Faculty Id", width=15).place(x=150,
-                                                                    y=55)
+facultyIdLabel = Label(homePage, text="FACULTY ID", width=15, background="#FCFFE7", foreground="black").place(x=480,
+                                                                    y=75)
 facultyIdVar = StringVar()
-facultyIdInput = Entry(homePage, textvariable=facultyIdVar).place(x=260,
-                                                                  y=50,
+facultyIdInput = Entry(homePage, textvariable=facultyIdVar).place(x=600,
+                                                                  y=70,
                                                                   width=200,
                                                                   height=30)
 # fine amount input
-fineIdLabel = Label(homePage, text="Fine Id", width=15).place(x=150, y=95)
+fineIdLabel = Label(homePage, text="FINE ID", width=15, background="#FCFFE7", foreground="black").place(x=480, y=115)
 fineIdVar = StringVar()
-fineIdInput = Entry(homePage, textvariable=fineIdVar).place(x=260,
-                                                            y=90,
+fineIdInput = Entry(homePage, textvariable=fineIdVar).place(x=600,
+                                                            y=110,
                                                             width=200,
                                                             height=30)
 # fine reason input
-fineReasonLabel = Label(homePage, text="Fine Description",
-                        width=15).place(x=150, y=135)
+fineReasonLabel = Label(homePage, text="FINE DESCRIPTION",
+                        width=18, background="#FCFFE7", foreground="black").place(x=480, y=155)
 fineReasonVar = StringVar()
-fineReasonInput = Entry(homePage, textvariable=fineReasonVar).place(x=260,
-                                                                    y=130,
+fineReasonInput = Entry(homePage, textvariable=fineReasonVar).place(x=600,
+                                                                    y=150,
                                                                     width=200,
                                                                     height=60)
-fineButton = Button(homePage, text="Fine", command=imposeFine).place(x=280,
-                                                                     y=200)
+fineButton = tk.Button(homePage, text="FINE", command=imposeFine, width=25, bd=3,
+                            bg='#EB455F', cursor='hand2', activebackground='#BAD7E9', fg='black').place(x=550,
+                                                                     y=230)
 
 # table for information about the available fines
 usnLabel = Label(homePage,
-                 text="->  Get the FINE ID from the bellow index",
-                 width=150).place(x=55, y=240)
-fineInfoTable = Treeview(homePage, height=20)
+                 text=">>>  GET FINE ID FROM BELOW INDEX  <<<",
+                 width=150, background="#FCFFE7", foreground="black", font="Sans  13" ).place(x=470, y=310)
+fineInfoTable = Treeview(homePage, height=11)
 fineInfoTable['columns'] = ("Fine Id", "Description", "Amount")
 
 # formate columns
@@ -121,20 +153,20 @@ fineInfoTable.heading("Amount", text="Amount", anchor=CENTER)
 for indx, fine in enumerate(getAllFineInfo()):
     fineInfoTable.insert(parent="", index="end", iid=indx, values=fine)
 
-fineInfoTable.place(x=55, y=265)
+fineInfoTable.place(x=380, y=330)
 
 #? Search Student Page Widgets
 outstandingFineVar = StringVar()
 outstandingFineLabel = Label(profilePage,
                              textvariable=outstandingFineVar,
-                             width=15).place(x=530, y=15)
+                             width=20, background="#FCFFE7", foreground="black").place(x=830, y=15)
 
 # usn input
-searchStudentLabel = Label(profilePage, text="Search Student USN",
-                           width=15).place(x=20, y=15)
+searchStudentLabel = Label(profilePage, text="USN:",
+                           width=10, background="#FCFFE7", foreground="black").place(x=500, y=15)
 searchStudentVar = StringVar()
 searchStudentInput = Entry(profilePage,
-                           textvariable=searchStudentVar).place(x=160,
+                           textvariable=searchStudentVar).place(x=540,
                                                                 y=10,
                                                                 width=200,
                                                                 height=30)
@@ -142,18 +174,18 @@ searchStudentInput = Entry(profilePage,
 nameOfStudentVar = StringVar()
 nameOfStudentVar.set("Name: ")
 nameOfStudent = Label(profilePage, textvariable=nameOfStudentVar,
-                      width=40).place(x=40, y=55)
+                      width=40, background="#FCFFE7", foreground="black").place(x=350, y=75)
 branchOfStudentVar = StringVar()
 branchOfStudentVar.set("Branch: ")
 branchOfStudent = Label(profilePage, textvariable=branchOfStudentVar,
-                        width=15).place(x=40, y=80)
+                        width=15, background="#FCFFE7", foreground="black").place(x=350, y=100)
 phoneNoStudentVar = StringVar()
 phoneNoStudentVar.set("Phone No: ")
 phoneNoStudent = Label(profilePage, textvariable=phoneNoStudentVar,
-                       width=25).place(x=40, y=105)
+                       width=25, background="#FCFFE7", foreground="black").place(x=350, y=125)
 
 # table for showing the fines
-fineDetailsTable = Treeview(profilePage, height=200)
+fineDetailsTable = Treeview(profilePage, height=18)
 fineDetailsTable['columns'] = ("Fine Id", "Date", "Description", "Amount",
                                "Paid")
 
@@ -161,7 +193,7 @@ fineDetailsTable['columns'] = ("Fine Id", "Date", "Description", "Amount",
 fineDetailsTable.column("#0", width=15)
 fineDetailsTable.column("Fine Id", anchor=CENTER, width=80)
 fineDetailsTable.column("Date", anchor=CENTER, width=100)
-fineDetailsTable.column("Description", anchor=W, width=350)
+fineDetailsTable.column("Description", anchor=W, width=320)
 fineDetailsTable.column("Amount", anchor=CENTER, width=70)
 fineDetailsTable.column("Paid", anchor=CENTER, width=80)
 
@@ -172,12 +204,14 @@ fineDetailsTable.heading("Date", text="Date", anchor=W)
 fineDetailsTable.heading("Description", text="Description", anchor=W)
 fineDetailsTable.heading("Amount", text="Amount", anchor=CENTER)
 fineDetailsTable.heading("Paid", text="Paid", anchor=W)
+fineDetailsTable.place(x=300, y=160)
 
-searchButton = Button(profilePage, text="Search",
-                      command=searchStudent).place(x=370, y=10)
-fineDetailsTable.place(x=10, y=160)
+searchButton = tk.Button(profilePage, text="Search",
+                      command=searchStudent,bd=3,
+                            bg='#EB455F', cursor='hand2', activebackground='#BAD7E9', fg='black', padx=1, pady=1 ).place(x=750, y=11)
 
-finePaymentBtn = Button(profilePage,
-                        text="Selected Fine Paid",
-                        command=finePayment).place(x=10, y=130)
+finePaymentBtn = tk.Button(profilePage,
+                        text="Fine Paid",
+                        command=finePayment,bd=4,
+                            bg='#EB455F', cursor='hand2', activebackground='#BAD7E9', fg='black', padx=35, pady=4).place(x=570, y=560)
 root.mainloop()
