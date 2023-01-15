@@ -69,7 +69,7 @@ def studentFineHistory(usn):
     return studentFineHistory
 
 
-# get the data of the student from the students db
+# get the data of the student from the students db returns (usn, name, no, branch)
 def getStudentInfo(usn):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -80,7 +80,7 @@ def getStudentInfo(usn):
     conn.close()
     return studentInfo[0]
 
-
+# paying the selected fine 
 def finePaidUpdate(fine_id):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -88,3 +88,10 @@ def finePaidUpdate(fine_id):
                                  (fine_id, ))
     conn.commit()
     conn.close()
+
+def getFineAmount(fineId):
+    allFines = getAllFineInfo()
+    for fine in allFines:
+        if fineId == fine[0]:
+            return fine[2]
+

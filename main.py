@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter.ttk import *
-from dbQueryFuncs import getAllFineInfo, postFine, studentFineHistory, getStudentInfo, finePaidUpdate
+from dbQueryFuncs import getAllFineInfo, postFine, studentFineHistory, getStudentInfo, finePaidUpdate, getFineAmount
 from msgFunc import sendTextMsg
 import tkinter as tk
 from tkinter import ttk
+
+
 
 
 #! create root window
@@ -47,10 +49,24 @@ photo5 = PhotoImage(file="")
 label5 = Label(homePage, image=photo5, background="#FCFFE7")
 label5.place(x=448, y=148)
 
+#! send text message through twilio gather data
+def sendTextMessage(usn, fineId):
+    studentData = getStudentInfo(usn)
+    name = studentData[1]
+    phoneNo = studentData[2]
+    fineAmount = getFineAmount(fineId)
+    if phoneNo != None:
+        sendTextMsg(name, fineAmount, phoneNo)
+    else:
+        print("no number to send the text mesage")
+
+
+
 #*! action function for the widgets
 def imposeFine():
     postFine(usnVar.get().upper(), int(facultyIdVar.get()),
              int(fineIdVar.get()), fineReasonVar.get())
+    sendTextMessage(usnVar.get(), int(fineIdVar.get())) # send text message logic
     usnVar.set("")
     facultyIdVar.set("")
     fineIdVar.set("")
