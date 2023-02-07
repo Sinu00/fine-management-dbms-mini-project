@@ -44,7 +44,8 @@ CREATE TABLE fines(
 );
 
 -----
-CREATE TABLE students(usn TEXT PRIMARY KEY, name TEXT);
+
+
 CREATE TABLE fines(
      usn TEXT , 
      description TEXT, 

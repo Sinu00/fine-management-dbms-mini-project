@@ -1,11 +1,13 @@
-
 import os
 from twilio.rest import Client
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Set environment variables for your credentials
 
-account_sid = "AC576ece80995665f06bf00ccfffbc4e9e"
-auth_token = "d445f62524e170bf1e0ee0f641f0bf27"
+account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
 client = Client(account_sid, auth_token)
 
 def sendTextMsg(name,amount,mobNumber):
